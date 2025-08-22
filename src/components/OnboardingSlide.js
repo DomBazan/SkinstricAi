@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import NameLocationForm from './NameLocationForm';
+import PhotoRequirements from './PhotoRequirements';
+import ImageUpload from './ImageUpload';
 
 const OnboardingSlide = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -10,13 +12,12 @@ const OnboardingSlide = () => {
     setCurrentStep(2);
   };
 
-  const handleBack = () => {
-    setCurrentStep(1);
+  const handleRequirementsAgree = () => {
+    setCurrentStep(3);
   };
 
-  const handleProceed = () => {
-    console.log('Proceeding to Level 2 with data:', userData);
-    // Here you would navigate to Level 2
+  const handleBack = () => {
+    setCurrentStep(prev => Math.max(1, prev - 1));
   };
 
   return (
@@ -25,7 +26,7 @@ const OnboardingSlide = () => {
         <div className="slide-header">
           <h1>Skinstric</h1>
           <div className="progress-bar">
-            <div className="progress" style={{ width: `${(currentStep / 2) * 100}%` }}></div>
+            <div className="progress" style={{ width: `${(currentStep / 3) * 100}%` }}></div>
           </div>
         </div>
 
@@ -38,26 +39,17 @@ const OnboardingSlide = () => {
           )}
           
           {currentStep === 2 && (
-            <div className="confirmation-step">
-              <h2>Welcome, {userData?.name}!</h2>
-              <p>From {userData?.location}</p>
-              <p>Your information has been saved successfully.</p>
-              
-              <div className="form-actions">
-                <button 
-                  onClick={handleBack}
-                  className="btn btn-secondary"
-                >
-                  Back
-                </button>
-                <button 
-                  onClick={handleProceed}
-                  className="btn btn-primary"
-                >
-                  Continue to Level 2
-                </button>
-              </div>
-            </div>
+            <PhotoRequirements 
+              onAgree={handleRequirementsAgree}
+              onBack={handleBack}
+            />
+          )}
+
+          {currentStep === 3 && (
+            <ImageUpload 
+              userData={userData}
+              onBack={handleBack}
+            />
           )}
         </div>
       </div>

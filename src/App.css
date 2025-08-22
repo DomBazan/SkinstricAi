@@ -55,13 +55,14 @@ body {
 .progress {
   height: 100%;
   background: white;
-  transition: width 0.3s ease;
+  transition: width 0.6s ease;
 }
 
 .slide-content {
   padding: 40px;
 }
 
+/* Level 1 Styles */
 .name-location-form {
   text-align: center;
 }
@@ -133,7 +134,6 @@ body {
   padding: 12px 30px;
   border: none;
   border-radius: 8px;
-  font-size: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 500;
@@ -164,20 +164,102 @@ body {
   background: #e9ecef;
 }
 
-.confirmation-step {
+/* Level 2 Styles */
+.image-upload {
   text-align: center;
 }
 
-.confirmation-step h2 {
+.image-upload h2 {
   font-size: 2rem;
   color: #333;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
+  font-weight: 300;
 }
 
-.confirmation-step p {
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.upload-options {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.upload-btn, .selfie-btn {
+  padding: 15px 30px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.upload-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.selfie-btn {
+  background: #f8f9fa;
+  color: #333;
+  border: 2px solid #e1e5e9;
+}
+
+.preview-container {
+  margin-top: 20px;
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.results-container {
+  text-align: center;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.result-item {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.result-item .label {
+  font-weight: bold;
+  color: #333;
+}
+
+.result-item .value {
   color: #666;
-  margin-bottom: 10px;
-  font-size: 1.1rem;
+  margin-left: 5px;
+}
+
+.upload-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.results-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 30px;
 }
 
 @media (max-width: 600px) {
@@ -198,11 +280,19 @@ body {
     padding: 30px 20px;
   }
   
-  .form-actions {
+  .form-actions, .upload-actions, .results-actions {
     flex-direction: column;
   }
   
   .btn {
     width: 100%;
+  }
+  
+  .upload-options {
+    flex-direction: column;
+  }
+  
+  .results-grid {
+    grid-template-columns: 1fr;
   }
 }
