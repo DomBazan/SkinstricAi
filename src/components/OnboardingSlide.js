@@ -23,12 +23,12 @@ const OnboardingSlide = () => {
   return (
     <div className="onboarding-slide">
       <div className="slide-container">
-        <div className="slide-header">
-          <h1>Skinstric</h1>
-          <div className="progress-bar">
-            <div className="progress" style={{ width: `${(currentStep / 3) * 100}%` }}></div>
-          </div>
+      <div className="slide-header">
+        <h1>Skinstric AI</h1>
+        <div className="progress-bar">
+          <div className="progress" style={{ width: `${(currentStep / 3) * 100}%` }}></div>
         </div>
+      </div>
 
         <div className="slide-content">
           {currentStep === 1 && (

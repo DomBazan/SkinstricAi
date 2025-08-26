@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './ResultsPage.css';
 
 // Category icons (using emojis for simplicity - can be replaced with SVG icons)
 const categoryIcons = {
@@ -96,7 +97,15 @@ const ResultsPage = ({ results, userData, onBack }) => {
       <div className="progress-bar">
         <div 
           className="progress-fill" 
-          style={{ width: `${percentage}%` }}
+          style={{ 
+            width: `${percentage}%`,
+            minWidth: percentage > 0 ? '20px' : '0px',
+            background: percentage >= 50 
+              ? 'linear-gradient(90deg, #4CAF50, #45a049)' 
+              : percentage >= 20 
+              ? 'linear-gradient(90deg, #FF9800, #f57c00)' 
+              : 'linear-gradient(90deg, #f44336, #d32f2f)'
+          }}
         />
       </div>
     );
@@ -123,16 +132,12 @@ const ResultsPage = ({ results, userData, onBack }) => {
                 borderLeft: `4px solid ${colors.primary}`
               }}
             >
-              <div className="card-header">
-                <span className="category-icon">{categoryIcons[key]}</span>
-                <h3>{data.title}</h3>
-              </div>
-              <div className="prediction-container">
-                <p className="prediction">{data.prediction}</p>
-                <div className="confidence-badge">
-                  <span className="confidence-value">{data.confidence}%</span>
-                  <span className="confidence-label">Confidence</span>
-                </div>
+              <div className="icon">{categoryIcons[key]}</div>
+              <h3>{data.title}</h3>
+              <p className="prediction">{data.prediction}</p>
+              <div className="confidence-badge">
+                <span className="confidence-value">{data.confidence}%</span>
+                <span className="confidence-label">Confidence</span>
               </div>
               <button className="view-details-btn">View Analysis</button>
             </div>
@@ -167,7 +172,15 @@ const ResultsPage = ({ results, userData, onBack }) => {
                     <div className="meter-bar">
                       <div 
                         className="meter-fill"
-                        style={{ width: `${detailedResults[selectedCategory].confidence}%` }}
+                        style={{ 
+                          width: `${detailedResults[selectedCategory].confidence}%`,
+                          minWidth: detailedResults[selectedCategory].confidence > 0 ? '20px' : '0px',
+                          background: detailedResults[selectedCategory].confidence >= 80 
+                            ? 'linear-gradient(90deg, #4CAF50, #45a049)' 
+                            : detailedResults[selectedCategory].confidence >= 60 
+                            ? 'linear-gradient(90deg, #FF9800, #f57c00)' 
+                            : 'linear-gradient(90deg, #f44336, #d32f2f)'
+                        }}
                       />
                       <span className="meter-value">{detailedResults[selectedCategory].confidence}%</span>
                     </div>
@@ -185,10 +198,10 @@ const ResultsPage = ({ results, userData, onBack }) => {
                     <div key={index} className="breakdown-item">
                       <div className="breakdown-info">
                         <span className="breakdown-label">{item.label || item.range}</span>
+                        <span className="breakdown-percentage">{item.percentage}%</span>
                       </div>
                       <div className="progress-container">
                         {renderProgressBar(item.percentage)}
-                        <span className="progress-percentage">{item.percentage}%</span>
                       </div>
                     </div>
                   ))}

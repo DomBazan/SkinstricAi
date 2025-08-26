@@ -1,6 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const PhotoRequirements = ({ onAgree, onBack }) => {
+  const [isConfirmed, setIsConfirmed] = useState(false);
+
+  const handleCheckboxChange = () => {
+    setIsConfirmed(!isConfirmed);
+  };
+
+  const handleContinue = () => {
+    if (isConfirmed) {
+      onAgree();
+    }
+  };
+
   return (
     <div className="requirements-page">
       <div className="requirements-container">
@@ -45,12 +57,29 @@ const PhotoRequirements = ({ onAgree, onBack }) => {
           </div>
         </div>
 
+        <div className="confirmation-checkbox">
+          <label>
+            <input
+              type="checkbox"
+              checked={isConfirmed}
+              onChange={handleCheckboxChange}
+              className="checkbox-input"
+            />
+            <span className="checkmark"></span>
+            I confirm that I understand all the photo requirements
+          </label>
+        </div>
+
         <div className="requirements-footer">
           <button onClick={onBack} className="btn btn-secondary">
             Back
           </button>
-          <button onClick={onAgree} className="btn btn-primary">
-            I Understand - Continue
+          <button 
+            onClick={handleContinue} 
+            className="btn btn-primary"
+            disabled={!isConfirmed}
+          >
+            Continue
           </button>
         </div>
       </div>
