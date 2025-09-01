@@ -1,5 +1,5 @@
 import React from 'react';
-import './SkeletonLoader.css'; // Create a CSS file for styling
+import './SkeletonLoader.css';
 
 const SkeletonLoader = () => {
   return (
