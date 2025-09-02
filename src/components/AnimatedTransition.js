@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './AnimatedTransition.css';
 
 const AnimatedTransition = ({ isVisible, children, type = 'fade' }) => {
   const [shouldRender, setShouldRender] = useState(isVisible);

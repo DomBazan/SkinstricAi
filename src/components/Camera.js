@@ -63,19 +63,7 @@ const Camera = ({ onCapture, onBack }) => {
         <button className="back-btn" onClick={onBack}>← Back</button>
       </div>
 
-      <div className="camera-guidance">
-        <div className="guidance-tips">
-          <h3>📸 Photo Requirements:</h3>
-          <ul>
-            <li>✅ Face the camera directly</li>
-            <li>✅ Ensure good lighting (avoid shadows)</li>
-            <li>✅ Keep your face centered</li>
-            <li>✅ Remove glasses if possible</li>
-            <li>✅ Keep a neutral expression</li>
-            <li>✅ Ensure clear visibility of facial features</li>
-          </ul>
-        </div>
-      </div>
+
 
       <div className="camera-view">
         {error ? (

@@ -1,0 +1,74 @@
+.diamond-page {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.rombuses-svg {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.2;
+}
+
+.form-container {
+  position: relative;
+  z-index: 10;
+  width: 300px;
+  display: flex;
+  justify-content: center;
+}
+
+.location-input {
+  width: 100%;
+  font-family: 'Roobert TRIAL', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 60px;
+  line-height: 64px;
+  letter-spacing: -7%;
+  text-align: center;
+  border: none;
+  border-bottom: 2px solid black;
+  outline: none;
+  background: transparent;
+  padding: 10px 5px;
+  color: black;
+  caret-color: black;
+}
+
+.location-input::placeholder {
+  color: black;
+  opacity: 0.5;
+}
+
+.location-input.error {
+  border-bottom-color: red;
+}
+
+.back-button {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 20;
+}
+
+.back-button img {
+  width: 40px;
+  height: auto;
+  display: block;
+}

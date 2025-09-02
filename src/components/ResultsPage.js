@@ -1,228 +1,176 @@
 import React, { useState } from 'react';
-import './ResultsPage.css';
-
-// Category icons (using emojis for simplicity - can be replaced with SVG icons)
-const categoryIcons = {
-  age: '👤',
-  gender: '⚧️',
-  ethnicity: '🌍',
-  emotion: '😊',
-  skinType: '✨'
-};
-
-// Category colors for better visual distinction
-const categoryColors = {
-  age: { primary: '#4CAF50', secondary: '#E8F5E8' },
-  gender: { primary: '#2196F3', secondary: '#E3F2FD' },
-  ethnicity: { primary: '#9C27B0', secondary: '#F3E5F5' },
-  emotion: { primary: '#FF9800', secondary: '#FFF3E0' },
-  skinType: { primary: '#795548', secondary: '#EFEBE9' }
-};
 
 const ResultsPage = ({ results, userData, onBack }) => {
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [showDetails, setShowDetails] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState('race');
+  const [selectedOption, setSelectedOption] = useState(null);
 
-  // Mock detailed AI results with percentages
-  const detailedResults = {
+  const demographicsData = {
+    race: {
+      title: 'RACE',
+      options: [
+        { label: 'East Asian', confidence: 96 },
+        { label: 'White', confidence: 6 },
+        { label: 'Black', confidence: 3 },
+        { label: 'South Asian', confidence: 2 },
+        { label: 'Latino Hispanic', confidence: 0 },
+        { label: 'South East Asian', confidence: 0 },
+        { label: 'Middle Eastern', confidence: 0 }
+      ],
+    },
     age: {
-      title: 'Age Analysis',
-      prediction: results?.age || 25,
-      confidence: 92,
-      breakdown: [
-        { range: '18-25', percentage: 45 },
-        { range: '26-35', percentage: 35 },
-        { range: '36-45', percentage: 15 },
-        { range: '46+', percentage: 5 }
-      ]
+      title: 'AGE',
+      options: [
+        { label: '20-29', confidence: 45 },
+        { label: '30-39', confidence: 35 },
+        { label: '40-49', confidence: 15 },
+        { label: '50+', confidence: 5 }
+      ],
     },
-    gender: {
-      title: 'Gender Analysis',
-      prediction: results?.gender || 'Male',
-      confidence: 88,
-      breakdown: [
-        { label: 'Male', percentage: 88 },
-        { label: 'Female', percentage: 10 },
-        { label: 'Non-binary', percentage: 2 }
-      ]
-    },
-    ethnicity: {
-      title: 'Ethnicity Analysis',
-      prediction: results?.ethnicity || 'Asian',
-      confidence: 85,
-      breakdown: [
-        { label: 'Asian', percentage: 85 },
-        { label: 'Caucasian', percentage: 8 },
-        { label: 'African', percentage: 4 },
-        { label: 'Hispanic', percentage: 2 },
-        { label: 'Mixed', percentage: 1 }
-      ]
-    },
-    emotion: {
-      title: 'Emotion Analysis',
-      prediction: results?.emotion || 'Happy',
-      confidence: 90,
-      breakdown: [
-        { label: 'Happy', percentage: 90 },
-        { label: 'Neutral', percentage: 6 },
-        { label: 'Surprised', percentage: 3 },
-        { label: 'Confident', percentage: 1 }
-      ]
-    },
-    skinType: {
-      title: 'Skin Type Analysis',
-      prediction: results?.skinType || 'Normal',
-      confidence: 87,
-      breakdown: [
-        { label: 'Normal', percentage: 87 },
-        { label: 'Oily', percentage: 8 },
-        { label: 'Dry', percentage: 3 },
-        { label: 'Combination', percentage: 2 }
-      ]
+    sex: {
+      title: 'SEX',
+      options: [
+        { label: 'Female', confidence: 88 },
+        { label: 'Male', confidence: 12 }
+      ],
     }
   };
 
-  const handleCategoryClick = (category) => {
+  const handleCategorySelect = (category) => {
     setSelectedCategory(category);
-    setShowDetails(true);
+    setSelectedOption(null);
   };
 
-  const handleCloseDetails = () => {
-    setShowDetails(false);
-    setSelectedCategory(null);
+  const handleOptionSelect = (option) => {
+    setSelectedOption(option);
   };
 
-  const renderProgressBar = (percentage) => {
+  const handleReset = () => {
+    setSelectedOption(null);
+  };
+
+  const handleConfirm = () => {
+    alert(`Confirmed selection: ${selectedOption?.label || 'None'}`);
+  };
+
+  // Helper function to render pie chart using SVG
+  const renderPieChart = (percentage) => {
+    const radius = 50;
+    const circumference = 2 * Math.PI * radius;
+    const offset = circumference - (percentage / 100) * circumference;
+
     return (
-      <div className="progress-bar">
-        <div 
-          className="progress-fill" 
-          style={{ 
-            width: `${percentage}%`,
-            minWidth: percentage > 0 ? '20px' : '0px',
-            background: percentage >= 50 
-              ? 'linear-gradient(90deg, #4CAF50, #45a049)' 
-              : percentage >= 20 
-              ? 'linear-gradient(90deg, #FF9800, #f57c00)' 
-              : 'linear-gradient(90deg, #f44336, #d32f2f)'
-          }}
+      <svg width="120" height="120" viewBox="0 0 120 120">
+        <circle
+          cx="60"
+          cy="60"
+          r={radius}
+          fill="none"
+          stroke="#eee"
+          strokeWidth="15"
         />
-      </div>
+        <circle
+          cx="60"
+          cy="60"
+          r={radius}
+          fill="none"
+          stroke="#000"
+          strokeWidth="15"
+          strokeDasharray={circumference}
+          strokeDashoffset={offset}
+          strokeLinecap="round"
+          transform="rotate(-90 60 60)"
+        />
+        <text
+          x="60"
+          y="65"
+          textAnchor="middle"
+          fontSize="24"
+          fontWeight="bold"
+          fill="#000"
+        >
+          {percentage}%
+        </text>
+      </svg>
     );
   };
 
   return (
-    <div className="results-page">
-      <div className="results-header">
-        <h1>AI Analysis Results</h1>
-        <p>Hello {userData?.name} from {userData?.location}</p>
-      </div>
+    <div className="results-page minimal-layout" style={{ color: 'black', backgroundColor: 'white', fontFamily: 'Arial, sans-serif' }}>
+      <header style={{ padding: '20px 40px', borderBottom: '1px solid #ccc' }}>
+        <h2 style={{ fontWeight: 'bold', fontSize: '24px', letterSpacing: '0.1em' }}>SKINSTRIC &nbsp;&nbsp;|&nbsp;&nbsp; ANALYSIS</h2>
+      </header>
 
-      <div className="results-grid">
-        {Object.entries(detailedResults).map(([key, data]) => {
-          const colors = categoryColors[key];
-          return (
-            <div 
-              key={key} 
-              className="result-card clickable"
-              onClick={() => handleCategoryClick(key)}
-              style={{ 
-                '--primary-color': colors.primary,
-                '--secondary-color': colors.secondary,
-                borderLeft: `4px solid ${colors.primary}`
+      <main style={{ display: 'flex', height: 'calc(100vh - 80px)', padding: '20px 40px' }}>
+        {/* Left vertical menu */}
+        <nav style={{ width: '15%', borderRight: '1px solid #ccc', display: 'flex', flexDirection: 'column' }}>
+          {Object.keys(demographicsData).map((category) => (
+            <button
+              key={category}
+              onClick={() => handleCategorySelect(category)}
+              style={{
+                backgroundColor: selectedCategory === category ? 'black' : 'white',
+                color: selectedCategory === category ? 'white' : 'black',
+                border: 'none',
+                padding: '15px',
+                textAlign: 'left',
+                cursor: 'pointer',
+                fontWeight: 'bold',
+                fontSize: '14px',
+                letterSpacing: '0.05em',
+                borderBottom: '1px solid #ccc'
               }}
             >
-              <div className="icon">{categoryIcons[key]}</div>
-              <h3>{data.title}</h3>
-              <p className="prediction">{data.prediction}</p>
-              <div className="confidence-badge">
-                <span className="confidence-value">{data.confidence}%</span>
-                <span className="confidence-label">Confidence</span>
-              </div>
-              <button className="view-details-btn">View Analysis</button>
-            </div>
-          );
-        })}
-      </div>
+              {demographicsData[category].title}
+            </button>
+          ))}
+        </nav>
 
-      {showDetails && selectedCategory && (
-        <div className="details-modal">
-          <div className="modal-content">
-            <div className="modal-header">
-              <div className="modal-title-container">
-                <span className="modal-icon">{categoryIcons[selectedCategory]}</span>
-                <h2>{detailedResults[selectedCategory].title}</h2>
-              </div>
-              <button className="close-btn" onClick={handleCloseDetails}>×</button>
+        {/* Middle selected analysis chart or text */}
+        <section style={{ flex: 1, padding: '0 40px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          {selectedOption ? (
+            <div onClick={() => setSelectedOption(null)} style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
+              {renderPieChart(selectedOption.confidence, 200)}
+              <span style={{ fontSize: '24px', fontWeight: 'bold' }}>{selectedOption.label}</span>
             </div>
-            
-            <div className="modal-body">
-              <div 
-                className="prediction-summary"
-                style={{ 
-                  background: categoryColors[selectedCategory].secondary,
-                  borderLeft: `4px solid ${categoryColors[selectedCategory].primary}`
+          ) : null}
+        </section>
+
+        {/* Right confidence breakdown list as text with highlight */}
+        <aside style={{ width: '25%', borderLeft: '1px solid #ccc', paddingLeft: '20px', backgroundColor: '#f9f9f9' }}>
+          <h3 style={{ fontWeight: 'bold', fontSize: '14px', padding: '10px 15px', borderBottom: '1px solid #ccc', backgroundColor: '#e0e0e0', letterSpacing: '0.1em' }}>
+            {demographicsData[selectedCategory].title.toUpperCase()} &nbsp;&nbsp; A.I. CONFIDENCE
+          </h3>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+            {demographicsData[selectedCategory].options.map((option) => (
+              <li
+                key={option.label}
+                onClick={() => handleOptionSelect(option)}
+                style={{
+                  padding: '10px 15px',
+                  cursor: 'pointer',
+                  backgroundColor: selectedOption?.label === option.label ? '#000' : 'transparent',
+                  color: selectedOption?.label === option.label ? '#fff' : '#000',
+                  fontWeight: selectedOption?.label === option.label ? 'bold' : 'normal',
+                  borderBottom: '1px solid #ddd',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  userSelect: 'none'
                 }}
               >
-                <div className="summary-content">
-                  <h3>AI Prediction</h3>
-                  <p className="main-prediction">{detailedResults[selectedCategory].prediction}</p>
-                  <div className="confidence-meter">
-                    <span className="meter-label">Confidence Level</span>
-                    <div className="meter-bar">
-                      <div 
-                        className="meter-fill"
-                        style={{ 
-                          width: `${detailedResults[selectedCategory].confidence}%`,
-                          minWidth: detailedResults[selectedCategory].confidence > 0 ? '20px' : '0px',
-                          background: detailedResults[selectedCategory].confidence >= 80 
-                            ? 'linear-gradient(90deg, #4CAF50, #45a049)' 
-                            : detailedResults[selectedCategory].confidence >= 60 
-                            ? 'linear-gradient(90deg, #FF9800, #f57c00)' 
-                            : 'linear-gradient(90deg, #f44336, #d32f2f)'
-                        }}
-                      />
-                      <span className="meter-value">{detailedResults[selectedCategory].confidence}%</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                <span>{option.label}</span>
+                <span>{option.confidence} %</span>
+              </li>
+            ))}
+          </ul>
+        </aside>
+      </main>
 
-              <div className="breakdown-section">
-                <h4 className="breakdown-title">
-                  <span className="title-icon">📊</span>
-                  Detailed Analysis Breakdown
-                </h4>
-                <div className="breakdown-list">
-                  {detailedResults[selectedCategory].breakdown.map((item, index) => (
-                    <div key={index} className="breakdown-item">
-                      <div className="breakdown-info">
-                        <span className="breakdown-label">{item.label || item.range}</span>
-                        <span className="breakdown-percentage">{item.percentage}%</span>
-                      </div>
-                      <div className="progress-container">
-                        {renderProgressBar(item.percentage)}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="modal-footer">
-              <button onClick={handleCloseDetails} className="btn btn-primary">
-                Close Analysis
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <div className="navigation-buttons">
-        <button onClick={onBack} className="btn btn-secondary">
-          Back
-        </button>
-      </div>
+      {/* Footer buttons */}
+      <footer style={{ padding: '10px 40px', borderTop: '1px solid #ccc', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+        <button onClick={onBack} style={{ padding: '10px 20px', fontWeight: 'bold', cursor: 'pointer' }}>BACK</button>
+        <button onClick={handleReset} style={{ padding: '10px 20px', fontWeight: 'bold', cursor: 'pointer' }}>RESET</button>
+        <button onClick={handleConfirm} disabled={!selectedOption} style={{ padding: '10px 20px', fontWeight: 'bold', cursor: selectedOption ? 'pointer' : 'not-allowed' }}>CONFIRM</button>
+      </footer>
     </div>
   );
 };

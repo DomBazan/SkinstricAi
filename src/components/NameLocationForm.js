@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { validateForm } from '../utils/validation';
 import { saveUserData, getUserData } from '../utils/storage';
+import { ReactComponent as Rombuses } from '../svg/rombuses.svg';
+import BackIcon from '../svg/button-icon-text-shrunk (3).svg';
+import './NameLocationForm.css';
 
 const NameLocationForm = ({ onSubmit, onBack }) => {
   const [formData, setFormData] = useState({
-    name: '',
     location: ''
   });
   const [errors, setErrors] = useState({
-    name: '',
     location: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -17,42 +18,27 @@ const NameLocationForm = ({ onSubmit, onBack }) => {
     const savedData = getUserData();
     if (savedData) {
       setFormData({
-        name: savedData.name || '',
         location: savedData.location || ''
       });
     }
   }, []);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-    
-    if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
+    const { value } = e.target;
+    setFormData({ location: value });
+    if (errors.location) {
+      setErrors({ location: '' });
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    const validation = validateForm(formData.name, formData.location);
-    
+    const validation = validateForm('', formData.location);
     if (!validation.isValid) {
-      setErrors({
-        name: validation.nameError,
-        location: validation.locationError
-      });
+      setErrors({ location: validation.locationError });
       return;
     }
-
     setIsSubmitting(true);
-    
     try {
       await saveUserData(formData);
       onSubmit(formData);
@@ -64,58 +50,30 @@ const NameLocationForm = ({ onSubmit, onBack }) => {
   };
 
   return (
-    <div className="name-location-form">
-      <h2>Let's get to know you</h2>
-      <p className="subtitle">Tell us your name and location to personalize your experience</p>
-      
-      <form onSubmit={handleSubmit} className="form-container">
-        <div className="form-group">
-          <label htmlFor="name">Your Name</label>
+    <div className="name-location-form diamond-page">
+      <div className="rombuses-wrapper">
+        <Rombuses className="rombuses-svg" />
+        <form onSubmit={handleSubmit} className="form-container">
           <input
             type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="Enter your name"
-            className={errors.name ? 'error' : ''}
-            maxLength={50}
-          />
-          {errors.name && <span className="error-message">{errors.name}</span>}
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="location">Your Location</label>
-          <input
-            type="text"
-            id="location"
             name="location"
             value={formData.location}
             onChange={handleChange}
-            placeholder="Enter your location"
-            className={errors.location ? 'error' : ''}
+            placeholder="Where are you from?"
+            className={`location-input ${errors.location ? 'error' : ''}`}
             maxLength={100}
+            autoFocus
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleSubmit(e);
+              }
+            }}
           />
-          {errors.location && <span className="error-message">{errors.location}</span>}
-        </div>
-
-        <div className="form-actions">
-          <button 
-            type="button" 
-            onClick={onBack}
-            className="btn btn-secondary"
-          >
-            Back
-          </button>
-          <button 
-            type="submit" 
-            disabled={isSubmitting}
-            className="btn btn-primary"
-          >
-            {isSubmitting ? 'Saving...' : 'Proceed'}
-          </button>
-        </div>
-      </form>
+        </form>
+      </div>
+      <button className="back-button" onClick={onBack} aria-label="Back">
+        <img src={BackIcon} alt="Back" />
+      </button>
     </div>
   );
 };
