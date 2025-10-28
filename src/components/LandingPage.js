@@ -1,28 +1,18 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import AnimatedTransition from './AnimatedTransition';
+import React from 'react';
 import headerSvg from '../svg/header.svg';
 import buttonLeftSvg from '../svg/button-icon-text-shrunk.svg';
 import buttonRightSvg from '../svg/button-icon-text-shrunk (1).svg';
 import './LandingPage.css';
 
-export default function LandingPage() {
-  const [showTransition, setShowTransition] = useState(false);
-  const navigate = useNavigate();
-
+export default function LandingPage({ onTakeTest }) {
   const handleTakeTestClick = () => {
-    setShowTransition(true);
-  };
-
-  const handleAnimationEnd = () => {
-    if (showTransition) {
-      navigate('/intro-location');
+    if (onTakeTest) {
+      onTakeTest();
     }
   };
 
   return (
-    <AnimatedTransition isVisible={!showTransition} type="fade">
-      <div className="landing-page-container" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div className="landing-page-container" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         {/* Header */}
         <header
           className="landing-header"
@@ -59,7 +49,7 @@ export default function LandingPage() {
           </h1>
 
           {/* Right button */}
-          <button onClick={() => navigate('/introduce-yourself')} className="btn-right" aria-label="Enter Code">
+          <button onClick={() => {}} className="btn-right" aria-label="Enter Code">
             <img src={buttonRightSvg} alt="Enter Code" />
           </button>
         </main>
@@ -81,6 +71,5 @@ export default function LandingPage() {
           what your skin needs.
         </footer>
       </div>
-    </AnimatedTransition>
   );
 }

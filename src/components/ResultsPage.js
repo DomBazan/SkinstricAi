@@ -4,36 +4,43 @@ const ResultsPage = ({ results, userData, onBack }) => {
   const [selectedCategory, setSelectedCategory] = useState('race');
   const [selectedOption, setSelectedOption] = useState(null);
 
-  const demographicsData = {
-    race: {
-      title: 'RACE',
-      options: [
-        { label: 'East Asian', confidence: 96 },
-        { label: 'White', confidence: 6 },
-        { label: 'Black', confidence: 3 },
-        { label: 'South Asian', confidence: 2 },
-        { label: 'Latino Hispanic', confidence: 0 },
-        { label: 'South East Asian', confidence: 0 },
-        { label: 'Middle Eastern', confidence: 0 }
-      ],
-    },
-    age: {
-      title: 'AGE',
-      options: [
-        { label: '20-29', confidence: 45 },
-        { label: '30-39', confidence: 35 },
-        { label: '40-49', confidence: 15 },
-        { label: '50+', confidence: 5 }
-      ],
-    },
-    sex: {
-      title: 'SEX',
-      options: [
-        { label: 'Female', confidence: 88 },
-        { label: 'Male', confidence: 12 }
-      ],
+  // Process API results into display format
+  const processResults = (apiResults) => {
+    if (!apiResults) return demographicsData;
+
+    const processed = { ...demographicsData };
+
+    // Process race data
+    if (apiResults.race) {
+      const raceOptions = Object.entries(apiResults.race).map(([key, value]) => ({
+        label: key.charAt(0).toUpperCase() + key.slice(1),
+        confidence: Math.round(value * 100)
+      })).sort((a, b) => b.confidence - a.confidence);
+      processed.race.options = raceOptions;
     }
+
+    // Process age data
+    if (apiResults.age) {
+      const ageOptions = Object.entries(apiResults.age).map(([key, value]) => ({
+        label: key,
+        confidence: Math.round(value * 100)
+      })).sort((a, b) => b.confidence - a.confidence);
+      processed.age.options = ageOptions;
+    }
+
+    // Process gender data
+    if (apiResults.gender) {
+      const genderOptions = Object.entries(apiResults.gender).map(([key, value]) => ({
+        label: key.charAt(0).toUpperCase() + key.slice(1),
+        confidence: Math.round(value * 100)
+      })).sort((a, b) => b.confidence - a.confidence);
+      processed.sex.options = genderOptions;
+    }
+
+    return processed;
   };
+
+  const demographicsData = processResults(results);
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);

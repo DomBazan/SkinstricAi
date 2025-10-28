@@ -1,0 +1,322 @@
+.camera-capture-page {
+  min-height: 100vh;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.camera-container {
+  flex: 1;
+  position: relative;
+  background: black;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Camera Feed - Full Screen Background */
+.camera-feed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+/* Header Overlay */
+.header-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  padding: 20px;
+}
+
+.header-overlay svg {
+  width: 100%;
+  height: auto;
+  max-width: 300px;
+}
+
+/* Take Picture Button */
+.take-pic-button {
+  position: absolute;
+  bottom: 150px;
+  right: 30px;
+  z-index: 10;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.take-pic-button:hover {
+  transform: scale(1.1);
+}
+
+.take-pic-button svg {
+  width: 80px;
+  height: 80px;
+}
+
+/* Instructions Overlay */
+.instructions-overlay {
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.instructions-overlay svg {
+  width: 300px;
+  height: auto;
+}
+
+/* Back Button - Pre Photo */
+.pre-photo-back-button {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  z-index: 10;
+}
+
+.pre-photo-back-button .nav-button {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.pre-photo-back-button .nav-button:hover {
+  opacity: 0.8;
+}
+
+.pre-photo-back-button svg {
+  width: 50px;
+  height: 50px;
+}
+
+/* After Photo State */
+.captured-photo-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.captured-photo {
+  max-width: 90%;
+  max-height: 70%;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Great Shot Text */
+.great-shot-overlay {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.great-shot-overlay svg {
+  width: 200px;
+  height: auto;
+}
+
+/* Navigation Overlay - After Photo */
+.navigation-overlay {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  right: 30px;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navigation-overlay .nav-button {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.navigation-overlay .nav-button:hover {
+  opacity: 0.8;
+}
+
+.navigation-overlay svg {
+  width: 50px;
+  height: 50px;
+}
+
+/* Error and Loading Overlays */
+.error-overlay,
+.loading-overlay,
+.permission-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 15;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  padding: 40px;
+}
+
+.error-overlay h2,
+.loading-overlay h2,
+.permission-overlay h3 {
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.error-overlay p,
+.loading-overlay p,
+.permission-overlay p {
+  margin-bottom: 30px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Loading States */
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 40px;
+  background: white;
+}
+
+.loading-message h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.loading-message p {
+  color: #666;
+  text-align: center;
+}
+
+/* Error States */
+.error-message {
+  text-align: center;
+  color: #333;
+}
+
+.error-message h2 {
+  margin-bottom: 20px;
+}
+
+.error-message p {
+  margin-bottom: 30px;
+  color: #666;
+}
+
+/* Navigation Buttons */
+.navigation-buttons {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  display: flex;
+  justify-content: flex-start;
+  z-index: 10;
+}
+
+.navigation-buttons .nav-button {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.navigation-buttons .nav-button:hover {
+  opacity: 0.8;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .take-pic-button svg {
+    width: 60px;
+    height: 60px;
+  }
+
+  .instructions-overlay svg {
+    width: 250px;
+  }
+
+  .great-shot-overlay svg {
+    width: 150px;
+  }
+
+  .navigation-overlay svg,
+  .pre-photo-back-button svg {
+    width: 40px;
+    height: 40px;
+  }
+
+  .header-overlay {
+    padding: 15px;
+  }
+
+  .header-overlay svg {
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .take-pic-button {
+    bottom: 120px;
+    right: 20px;
+  }
+
+  .take-pic-button svg {
+    width: 50px;
+    height: 50px;
+  }
+
+  .instructions-overlay svg {
+    width: 200px;
+  }
+
+  .great-shot-overlay svg {
+    width: 120px;
+  }
+
+  .navigation-overlay,
+  .pre-photo-back-button {
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+  }
+
+  .navigation-overlay svg,
+  .pre-photo-back-button svg {
+    width: 35px;
+    height: 35px;
+  }
+
+  .header-overlay {
+    padding: 10px;
+  }
+
+  .header-overlay svg {
+    max-width: 150px;
+  }
+}
